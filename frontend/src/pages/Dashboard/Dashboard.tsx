@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MetricCard from '../../components/Dashboard/MetricCard';
 import ChartWidget from '../../components/Dashboard/ChartWidget';
 import AlertPanel from '../../components/Dashboard/AlertPanel';
 import DeviceStatus from '../../components/Dashboard/DeviceStatus';
 
 const Dashboard: React.FC = () => {
-  const [metrics, setMetrics] = useState({
+  const [metrics] = useState({
     totalDevices: 156,
     onlineDevices: 142,
     activeAlerts: 3,
@@ -20,24 +20,42 @@ const Dashboard: React.FC = () => {
       title: 'Temperature Sensor Offline',
       message: 'Temperature sensor in Room 201 is not responding',
       type: 'warning' as const,
+      category: 'device' as const,
+      source: {
+        type: 'device' as const,
+        id: 'temp_201'
+      },
       timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-      deviceId: 'temp_201'
+      acknowledged: false,
+      resolved: false
     },
     {
       id: '2',
       title: 'High Energy Consumption',
       message: 'Building A energy consumption is 15% above normal',
       type: 'error' as const,
+      category: 'energy' as const,
+      source: {
+        type: 'system' as const,
+        id: 'energy_bldg_a'
+      },
       timestamp: new Date(Date.now() - 1000 * 60 * 60), // 1 hour ago
-      deviceId: 'energy_bldg_a'
+      acknowledged: true,
+      resolved: false
     },
     {
       id: '3',
       title: 'Maintenance Due',
       message: 'HVAC system maintenance scheduled for tomorrow',
       type: 'info' as const,
+      category: 'maintenance' as const,
+      source: {
+        type: 'system' as const,
+        id: 'hvac_01'
+      },
       timestamp: new Date(Date.now() - 1000 * 60 * 120), // 2 hours ago
-      deviceId: 'hvac_01'
+      acknowledged: false,
+      resolved: false
     }
   ]);
 
