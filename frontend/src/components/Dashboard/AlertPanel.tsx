@@ -1,5 +1,6 @@
 import React from 'react';
 import { Alert } from '../../types';
+import { Transition } from '@headlessui/react';
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -48,26 +49,46 @@ const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
       <div className="card-body dark:bg-gray-800">
         <div className="space-y-3">
           {alerts.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400 text-center py-4">No recent alerts</p>
+            <Transition
+              show={true}
+              enter="transition ease-out duration-300"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-200"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <p className="text-gray-500 dark:text-gray-400 text-center py-4">No recent alerts</p>
+            </Transition>
           ) : (
-            alerts.map((alert) => {
+            alerts.map((alert, index) => {
               const IconComponent = getAlertIcon(alert.type);
               return (
-                <div
+                <Transition
                   key={alert.id}
-                  className={`p-3 border-l-4 rounded-r-md ${getAlertColor(alert.type)}`}
+                  show={true}
+                  enter="transition ease-out duration-300"
+                  enterFrom="transform opacity-0 translate-y-2"
+                  enterTo="transform opacity-100 translate-y-0"
+                  leave="transition ease-in duration-200"
+                  leaveFrom="transform opacity-100 translate-y-0"
+                  leaveTo="transform opacity-0 translate-y-2"
                 >
-                  <div className="flex items-start">
-                    <IconComponent className="text-lg mr-2 text-gray-600 dark:text-gray-400" />
-                    <div className="flex-1">
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">{alert.title}</h4>
-                      <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{alert.message}</p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                        {alert.timestamp.toLocaleTimeString()}
-                      </p>
+                  <div
+                    className={`p-3 border-l-4 rounded-r-md ${getAlertColor(alert.type)}`}
+                  >
+                    <div className="flex items-start">
+                      <IconComponent className="text-lg mr-2 text-gray-600 dark:text-gray-400" />
+                      <div className="flex-1">
+                        <h4 className="text-sm font-medium text-gray-900 dark:text-white">{alert.title}</h4>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{alert.message}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                          {alert.timestamp.toLocaleTimeString()}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Transition>
               );
             })
           )}
