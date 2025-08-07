@@ -1,0 +1,325 @@
+version: '3.8'
+
+services:
+  # PostgreSQL with PostGIS
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: digital-twin-postgres
+    environment:
+      POSTGRES_DB: digital_twin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - digital-twin-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # TimescaleDB for time-series data
+  timescaledb:
+    image: timescale/timescaledb:latest-pg14
+    container_name: digital-twin-timescaledb
+    environment:
+      POSTGRES_DB: timeseries
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    networks:
+      - digital-twin-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MongoDB for document storage
+  mongodb:
+    image: mongo:6
+    container_name: digital-twin-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: digital_twin
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./database/mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - digital-twin-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis for caching and Celery
+  redis:
+    image: redis:7-alpine
+    container_name: digital-twin-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - digital-twin-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MQTT Broker (Eclipse Mosquitto)
+  mqtt:
+    image: eclipse-mosquitto:2.0
+    container_name: digital-twin-mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mqtt/config:/mosquitto/config
+      - ./mqtt/data:/mosquitto/data
+      - ./mqtt/log:/mosquitto/log
+    networks:
+      - digital-twin-network
+    healthcheck:
+      test: ["CMD", "mosquitto_pub", "-h", "localhost", "-t", "test", "-m", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Node.js Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: digital-twin-backend
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: digital_twin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      MONGODB_URI: mongodb://admin:password@mongodb:27017/digital_twin?authSource=admin
+      TIMESCALE_HOST: timescaledb
+      TIMESCALE_PORT: 5432
+      TIMESCALE_DB: timeseries
+      TIMESCALE_USER: postgres
+      TIMESCALE_PASSWORD: password
+      REDIS_URL: redis://redis:6379
+      MQTT_HOST: mqtt
+      MQTT_PORT: 1883
+      JWT_SECRET: your-super-secret-jwt-key
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mqtt:
+        condition: service_healthy
+    networks:
+      - digital-twin-network
+    restart: unless-stopped
+
+  # Python Services
+  python-services:
+    build:
+      context: ./backend/python
+      dockerfile: Dockerfile
+    container_name: digital-twin-python
+    environment:
+      PYTHONPATH: /app
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: digital_twin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      MONGODB_URI: mongodb://admin:password@mongodb:27017/digital_twin?authSource=admin
+      REDIS_URL: redis://redis:6379
+      MQTT_HOST: mqtt
+      MQTT_PORT: 1883
+    volumes:
+      - ./backend/python:/app
+      - ./uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mqtt:
+        condition: service_healthy
+    networks:
+      - digital-twin-network
+    restart: unless-stopped
+
+  # Celery Worker
+  celery-worker:
+    build:
+      context: ./backend/python
+      dockerfile: Dockerfile
+    container_name: digital-twin-celery
+    command: celery -A celery_app worker --loglevel=info
+    environment:
+      PYTHONPATH: /app
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: digital_twin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      MONGODB_URI: mongodb://admin:password@mongodb:27017/digital_twin?authSource=admin
+      REDIS_URL: redis://redis:6379
+      MQTT_HOST: mqtt
+      MQTT_PORT: 1883
+    volumes:
+      - ./backend/python:/app
+      - ./uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - digital-twin-network
+    restart: unless-stopped
+
+  # Celery Beat (Scheduler)
+  celery-beat:
+    build:
+      context: ./backend/python
+      dockerfile: Dockerfile
+    container_name: digital-twin-celery-beat
+    command: celery -A celery_app beat --loglevel=info
+    environment:
+      PYTHONPATH: /app
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: digital_twin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      MONGODB_URI: mongodb://admin:password@mongodb:27017/digital_twin?authSource=admin
+      REDIS_URL: redis://redis:6379
+      MQTT_HOST: mqtt
+      MQTT_PORT: 1883
+    volumes:
+      - ./backend/python:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - digital-twin-network
+    restart: unless-stopped
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: digital-twin-frontend
+    environment:
+      REACT_APP_API_URL: http://localhost:5000
+      REACT_APP_WS_URL: ws://localhost:5000
+      REACT_APP_MAPBOX_TOKEN: your-mapbox-token
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - digital-twin-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: digital-twin-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - digital-twin-network
+    restart: unless-stopped
+
+  # Monitoring - Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: digital-twin-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - digital-twin-network
+    restart: unless-stopped
+
+  # Monitoring - Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: digital-twin-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - digital-twin-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  timescaledb_data:
+  mongodb_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  digital-twin-network:
+    driver: bridge 
