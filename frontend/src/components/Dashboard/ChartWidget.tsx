@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 
 interface ChartWidgetProps {
@@ -18,6 +18,13 @@ interface ChartWidgetProps {
 
 const ChartWidget: React.FC<ChartWidgetProps> = ({ title, type, data }) => {
   const chartRef = useRef<HTMLDivElement>(null);
+  const [tooltip, setTooltip] = useState<{ show: boolean; x: number; y: number; value: number; label: string }>({
+    show: false,
+    x: 0,
+    y: 0,
+    value: 0,
+    label: ''
+  });
 
   useEffect(() => {
     if (!chartRef.current || !data) return;
@@ -58,7 +65,7 @@ const ChartWidget: React.FC<ChartWidgetProps> = ({ title, type, data }) => {
         .attr('stroke-width', 2)
         .attr('d', line);
 
-      // Add dots
+      // Add interactive dots with tooltips
       svg.selectAll('.dot')
         .data(data.datasets[0].data)
         .enter()
@@ -66,26 +73,69 @@ const ChartWidget: React.FC<ChartWidgetProps> = ({ title, type, data }) => {
         .attr('class', 'dot')
         .attr('cx', (d, i) => x(data.labels[i]) || 0)
         .attr('cy', d => y(d))
-        .attr('r', 4)
-        .attr('fill', data.datasets[0].backgroundColor || '#3b82f6');
+        .attr('r', 6)
+        .attr('fill', data.datasets[0].backgroundColor || '#3b82f6')
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 2)
+        .style('cursor', 'pointer')
+        .on('mouseover', function(event, d) {
+          const i = data.datasets[0].data.indexOf(d);
+          const [xPos, yPos] = d3.pointer(event);
+          
+          setTooltip({
+            show: true,
+            x: event.pageX,
+            y: event.pageY - 10,
+            value: d,
+            label: data.labels[i]
+          });
+
+          d3.select(this)
+            .attr('r', 8)
+            .attr('fill', '#1d4ed8');
+        })
+        .on('mouseout', function() {
+          setTooltip(prev => ({ ...prev, show: false }));
+          
+          d3.select(this)
+            .attr('r', 6)
+            .attr('fill', data.datasets[0].backgroundColor || '#3b82f6');
+        });
 
       // Add axes
       svg.append('g')
         .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x))
+        .style('color', '#6b7280');
 
       svg.append('g')
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y))
+        .style('color', '#6b7280');
     }
   }, [data, type]);
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+    <div className="card dark:bg-gray-800 dark:border-gray-700">
+      <div className="card-header dark:bg-gray-700">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white">{title}</h3>
       </div>
-      <div className="card-body">
-        <div ref={chartRef} className="w-full h-80"></div>
+      <div className="card-body dark:bg-gray-800">
+        <div ref={chartRef} className="w-full h-80 relative"></div>
+        
+        {/* Tooltip */}
+        {tooltip.show && (
+          <div
+            className="absolute z-10 px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-lg pointer-events-none"
+            style={{
+              left: tooltip.x,
+              top: tooltip.y,
+              transform: 'translate(-50%, -100%)'
+            }}
+          >
+            <div className="font-medium">{tooltip.label}</div>
+            <div>{tooltip.value} kWh</div>
+          </div>
+        )}
       </div>
     </div>
   );
