@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import MenuIcon from '@mui/icons-material/Menu';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -18,9 +21,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             onClick={onMenuClick}
             className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
           >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <MenuIcon className="h-6 w-6" />
           </button>
           
           {/* Page title */}
@@ -37,10 +38,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               onClick={() => setNotificationsOpen(!notificationsOpen)}
               className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM10.5 3.75a6 6 0 0 1 6 6v3.75l2.25 2.25V12a8.25 8.25 0 0 0-16.5 0v3.75l2.25-2.25V9.75a6 6 0 0 1 6-6z" />
-              </svg>
-              <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-danger-400"></span>
+              <NotificationsIcon className="h-6 w-6" />
+              <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-red-400"></span>
             </button>
             
             {/* Notifications dropdown */}
@@ -64,13 +63,11 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               onClick={() => setUserMenuOpen(!userMenuOpen)}
               className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
-              <div className="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
                 <span className="text-white font-medium">JD</span>
               </div>
               <span className="ml-2 text-gray-700 hidden md:block">John Doe</span>
-              <svg className="ml-1 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+              <KeyboardArrowDownIcon className="ml-1 h-4 w-4 text-gray-400" />
             </button>
             
             {/* User dropdown */}
