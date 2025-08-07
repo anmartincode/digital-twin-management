@@ -101,6 +101,9 @@ if (process.env.NODE_ENV !== 'production') {
 // Socket.IO connection handling
 socketService(io);
 
+// Start MQTT service
+mqttService();
+
 // Error handling middleware
 app.use(errorHandler);
 
@@ -111,9 +114,6 @@ app.use('*', (req, res) => {
     message: 'Route not found'
   });
 });
-
-// Start MQTT service
-mqttService.connect();
 
 const PORT = process.env.PORT || 5000;
 

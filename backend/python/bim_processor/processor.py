@@ -1,5 +1,11 @@
-import ifcopenshell
-import ifcopenshell.geom
+try:
+    import ifcopenshell
+    import ifcopenshell.geom
+    IFC_AVAILABLE = True
+except ImportError:
+    IFC_AVAILABLE = False
+    print("Warning: ifcopenshell not available. BIM processing will be limited.")
+
 import numpy as np
 import json
 import os
@@ -37,10 +43,14 @@ class BIMProcessor:
     """Handles IFC file processing and BIM model extraction"""
     
     def __init__(self):
-        self.settings = ifcopenshell.geom.settings()
-        self.settings.set(self.settings.USE_WORLD_COORDS, True)
-        self.settings.set(self.settings.INCLUDE_CURVES, True)
-        self.settings.set(self.settings.APPLY_DEFAULT_MATERIALS, True)
+        if not IFC_AVAILABLE:
+            logger.warning("IFC OpenShell not available. BIM processing will be limited.")
+            self.settings = None
+        else:
+            self.settings = ifcopenshell.geom.settings()
+            self.settings.set(self.settings.USE_WORLD_COORDS, True)
+            self.settings.set(self.settings.INCLUDE_CURVES, True)
+            self.settings.set(self.settings.APPLY_DEFAULT_MATERIALS, True)
     
     def process_ifc_file(self, file_path: str) -> BIMModel:
         """
@@ -52,6 +62,9 @@ class BIMProcessor:
         Returns:
             BIMModel object containing all extracted data
         """
+        if not IFC_AVAILABLE:
+            raise ImportError("IFC OpenShell is not available. Please install ifcopenshell to process IFC files.")
+        
         try:
             logger.info(f"Processing IFC file: {file_path}")
             
@@ -373,14 +386,17 @@ if __name__ == "__main__":
     # Process IFC file
     ifc_path = "sample.ifc"
     if os.path.exists(ifc_path):
-        model = processor.process_ifc_file(ifc_path)
-        
-        # Export to JSON
-        processor.export_to_json(model, "bim_model.json")
-        
-        # Print statistics
-        stats = processor.get_element_statistics(model)
-        print("BIM Model Statistics:")
-        print(json.dumps(stats, indent=2))
+        try:
+            model = processor.process_ifc_file(ifc_path)
+            
+            # Export to JSON
+            processor.export_to_json(model, "bim_model.json")
+            
+            # Print statistics
+            stats = processor.get_element_statistics(model)
+            print("BIM Model Statistics:")
+            print(json.dumps(stats, indent=2))
+        except ImportError as e:
+            print(f"Error: {e}")
     else:
         print(f"IFC file not found: {ifc_path}") 
