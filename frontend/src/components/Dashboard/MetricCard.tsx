@@ -18,11 +18,11 @@ const MetricCard: React.FC<MetricCardProps> = ({
   const getChangeColor = () => {
     switch (changeType) {
       case 'positive':
-        return 'text-success-600 bg-success-100';
+        return 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900';
       case 'negative':
-        return 'text-danger-600 bg-danger-100';
+        return 'text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-700';
     }
   };
 
@@ -38,12 +38,12 @@ const MetricCard: React.FC<MetricCardProps> = ({
   };
 
   return (
-    <div className="card">
-      <div className="card-body">
+    <div className="card dark:bg-gray-800 dark:border-gray-700">
+      <div className="card-body dark:bg-gray-800">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-600">{title}</p>
-            <p className="text-2xl font-bold text-gray-900">{value}</p>
+            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
           </div>
           <div className="text-2xl">{icon}</div>
         </div>
