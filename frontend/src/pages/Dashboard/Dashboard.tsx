@@ -3,6 +3,14 @@ import MetricCard from '../../components/Dashboard/MetricCard';
 import ChartWidget from '../../components/Dashboard/ChartWidget';
 import AlertPanel from '../../components/Dashboard/AlertPanel';
 import DeviceStatus from '../../components/Dashboard/DeviceStatus';
+import SatelliteIcon from '@mui/icons-material/Satellite';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import WarningIcon from '@mui/icons-material/Warning';
+import BoltIcon from '@mui/icons-material/Bolt';
+import GroupsIcon from '@mui/icons-material/Groups';
+import BuildIcon from '@mui/icons-material/Build';
+import SensorsIcon from '@mui/icons-material/Sensors';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const Dashboard: React.FC = () => {
   const [metrics] = useState({
@@ -82,42 +90,42 @@ const Dashboard: React.FC = () => {
           value={metrics.totalDevices}
           change="+2"
           changeType="positive"
-          icon="📡"
+          icon={SatelliteIcon}
         />
         <MetricCard
           title="Online Devices"
           value={metrics.onlineDevices}
           change={`${Math.round((metrics.onlineDevices / metrics.totalDevices) * 100)}%`}
           changeType="positive"
-          icon="🟢"
+          icon={FiberManualRecordIcon}
         />
         <MetricCard
           title="Active Alerts"
           value={metrics.activeAlerts}
           change="-1"
           changeType="negative"
-          icon="⚠️"
+          icon={WarningIcon}
         />
         <MetricCard
           title="Energy (kWh)"
           value={metrics.energyConsumption}
           change="+5.2%"
           changeType="negative"
-          icon="⚡"
+          icon={BoltIcon}
         />
         <MetricCard
           title="Occupancy Rate"
           value={`${metrics.occupancyRate}%`}
           change="+3%"
           changeType="positive"
-          icon="👥"
+          icon={GroupsIcon}
         />
         <MetricCard
           title="Maintenance Tasks"
           value={metrics.maintenanceTasks}
           change="+2"
           changeType="neutral"
-          icon="🔧"
+          icon={BuildIcon}
         />
       </div>
 
@@ -161,7 +169,7 @@ const Dashboard: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 dark:text-blue-300 text-sm">📡</span>
+                    <SensorsIcon className="text-blue-600 dark:text-blue-300 text-sm" />
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -174,7 +182,7 @@ const Dashboard: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                    <span className="text-green-600 dark:text-green-300 text-sm">✅</span>
+                    <CheckCircleIcon className="text-green-600 dark:text-green-300 text-sm" />
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -187,7 +195,7 @@ const Dashboard: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
-                    <span className="text-yellow-600 dark:text-yellow-300 text-sm">⚠️</span>
+                    <WarningIcon className="text-yellow-600 dark:text-yellow-300 text-sm" />
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">

@@ -64,9 +64,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
-                <span className="text-white font-medium">JD</span>
+                <span className="text-white font-medium">AM</span>
               </div>
-              <span className="ml-2 text-gray-700 dark:text-gray-300 hidden md:block">John Doe</span>
+              <span className="ml-2 text-gray-700 dark:text-gray-300 hidden md:block">Andy Martinez</span>
               <KeyboardArrowDownIcon className="ml-1 h-4 w-4 text-gray-400" />
             </button>
             

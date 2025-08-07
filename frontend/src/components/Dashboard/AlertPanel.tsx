@@ -1,5 +1,9 @@
 import React from 'react';
 import { Alert } from '../../types';
+import InfoIcon from '@mui/icons-material/Info';
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
+import ReportIcon from '@mui/icons-material/Report';
 
 interface AlertPanelProps {
   alerts: Alert[];
@@ -9,30 +13,30 @@ const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
   const getAlertIcon = (type: Alert['type']) => {
     switch (type) {
       case 'info':
-        return 'ℹ️';
+        return InfoIcon;
       case 'warning':
-        return '⚠️';
+        return WarningIcon;
       case 'error':
-        return '❌';
+        return ErrorIcon;
       case 'critical':
-        return '🚨';
+        return ReportIcon;
       default:
-        return '📢';
+        return InfoIcon;
     }
   };
 
   const getAlertColor = (type: Alert['type']) => {
     switch (type) {
       case 'info':
-        return 'border-blue-200 bg-blue-50 dark:border-blue-700 dark:bg-blue-900';
+        return 'border-blue-100 bg-blue-25 dark:border-blue-800 dark:bg-blue-950';
       case 'warning':
-        return 'border-yellow-200 bg-yellow-50 dark:border-yellow-700 dark:bg-yellow-900';
+        return 'border-amber-100 bg-amber-25 dark:border-amber-800 dark:bg-amber-950';
       case 'error':
-        return 'border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900';
+        return 'border-red-100 bg-red-25 dark:border-red-800 dark:bg-red-950';
       case 'critical':
-        return 'border-red-300 bg-red-100 dark:border-red-600 dark:bg-red-800';
+        return 'border-orange-100 bg-orange-25 dark:border-orange-800 dark:bg-orange-950';
       default:
-        return 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800';
+        return 'border-gray-100 bg-gray-25 dark:border-gray-800 dark:bg-gray-950';
     }
   };
 
@@ -46,23 +50,26 @@ const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
           {alerts.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-center py-4">No recent alerts</p>
           ) : (
-            alerts.map((alert) => (
-              <div
-                key={alert.id}
-                className={`p-3 border-l-4 rounded-r-md ${getAlertColor(alert.type)}`}
-              >
-                <div className="flex items-start">
-                  <span className="text-lg mr-2">{getAlertIcon(alert.type)}</span>
-                  <div className="flex-1">
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">{alert.title}</h4>
-                    <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{alert.message}</p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                      {alert.timestamp.toLocaleTimeString()}
-                    </p>
+            alerts.map((alert) => {
+              const IconComponent = getAlertIcon(alert.type);
+              return (
+                <div
+                  key={alert.id}
+                  className={`p-3 border-l-4 rounded-r-md ${getAlertColor(alert.type)}`}
+                >
+                  <div className="flex items-start">
+                    <IconComponent className="text-lg mr-2 text-gray-600 dark:text-gray-400" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">{alert.title}</h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{alert.message}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                        {alert.timestamp.toLocaleTimeString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </div>

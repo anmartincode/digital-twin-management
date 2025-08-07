@@ -1,11 +1,12 @@
 import React from 'react';
+import { SvgIconComponent } from '@mui/icons-material';
 
 interface MetricCardProps {
   title: string;
   value: string | number;
   change?: string;
   changeType?: 'positive' | 'negative' | 'neutral';
-  icon: string;
+  icon: SvgIconComponent;
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ 
@@ -13,7 +14,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
   value, 
   change, 
   changeType = 'neutral',
-  icon 
+  icon: IconComponent
 }) => {
   const getChangeColor = () => {
     switch (changeType) {
@@ -45,7 +46,9 @@ const MetricCard: React.FC<MetricCardProps> = ({
             <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
           </div>
-          <div className="text-2xl">{icon}</div>
+          <div className="text-2xl">
+            <IconComponent className="h-8 w-8 text-gray-600 dark:text-gray-400" />
+          </div>
         </div>
         
         {change && (
