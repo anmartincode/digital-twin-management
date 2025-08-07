@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden lg:ml-16">
         {/* Header */}
         <Header onMenuClick={() => setSidebarOpen(true)} />
         

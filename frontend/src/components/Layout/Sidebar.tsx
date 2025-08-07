@@ -34,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block fixed inset-y-0 left-0 z-50 w-16 bg-gray-900 shadow-lg">
+      <div className="hidden lg:block fixed inset-y-0 left-0 z-40 w-16 bg-gray-900 shadow-lg">
         {/* Logo */}
         <div className="flex items-center justify-center h-16 px-2 border-b border-gray-700">
           <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
