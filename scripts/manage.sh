@@ -182,7 +182,7 @@ show_status() {
     echo ""
     echo "Port Usage:"
     echo "Frontend: http://localhost:3000"
-    echo "Backend: http://localhost:5001"
+    echo "Backend: http://localhost:5000"
     echo "PostgreSQL: localhost:5432"
     echo "MongoDB: localhost:27017"
     echo "Redis: localhost:6379"
