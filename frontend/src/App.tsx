@@ -11,6 +11,10 @@ import Maintenance from './pages/Maintenance/Maintenance';
 import Energy from './pages/Energy/Energy';
 import Analytics from './pages/Analytics/Analytics';
 import Settings from './pages/Settings/Settings';
+import Projects from './pages/Projects/Projects';
+import Reports from './pages/Reports/Reports';
+import Companies from './pages/Companies/Companies';
+import People from './pages/People/People';
 
 const App: React.FC = () => {
   return (
@@ -27,6 +31,10 @@ const App: React.FC = () => {
             <Route path="/energy" element={<Energy />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/companies" element={<Companies />} />
+            <Route path="/people" element={<People />} />
           </Routes>
         </Layout>
       </div>

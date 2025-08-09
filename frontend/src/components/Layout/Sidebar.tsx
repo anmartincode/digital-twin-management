@@ -36,12 +36,10 @@ const navigation = [
 ];
 
 const secondaryNavigation = [
-  { name: 'Projects', icon: FolderIcon, count: '3/5' },
-  { name: 'Analytics', icon: BarChartIcon },
-  { name: 'Reports', icon: AnalyticsIcon, badge: 'New' },
-  { name: 'Extensions', icon: ExtensionIcon },
-  { name: 'Companies', icon: BusinessIcon, count: '17' },
-  { name: 'People', icon: PeopleIcon, count: '164' },
+  { name: 'Projects', icon: FolderIcon, count: '3/5', href: '/projects' },
+  { name: 'Reports', icon: AnalyticsIcon, badge: 'New', href: '/reports' },
+  { name: 'Companies', icon: BusinessIcon, count: '8', href: '/companies' },
+  { name: 'People', icon: PeopleIcon, count: '8', href: '/people' },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
@@ -101,24 +99,32 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <div className="space-y-1">
             {secondaryNavigation.map((item) => {
               const IconComponent = item.icon;
+              const isActive = location.pathname === item.href;
               return (
-                <div
+                <Link
                   key={item.name}
-                  className="flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md cursor-pointer transition-colors duration-200"
+                  to={item.href}
+                  className={`
+                    flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors duration-200
+                    ${isActive 
+                      ? 'bg-sky-50 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300' 
+                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    }
+                  `}
                 >
                   <div className="flex items-center">
                     <IconComponent className="w-5 h-5 mr-3" />
                     {item.name}
                   </div>
                   {item.count && (
-                    <span className="text-xs text-gray-500 dark:text-gray-400">{item.count}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">{item.count}</span>
                   )}
                   {item.badge && (
-                    <span className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 rounded-full">
+                    <span className="px-2 py-1 text-xs bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-300 rounded-full">
                       {item.badge}
                     </span>
                   )}
-                </div>
+                </Link>
               );
             })}
           </div>
