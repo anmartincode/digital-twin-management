@@ -3,6 +3,9 @@ import MetricCard from '../../components/Dashboard/MetricCard';
 import ChartWidget from '../../components/Dashboard/ChartWidget';
 import AlertPanel from '../../components/Dashboard/AlertPanel';
 import DeviceStatus from '../../components/Dashboard/DeviceStatus';
+import BudgetChart from '../../components/Dashboard/BudgetChart';
+import FacilityTable from '../../components/Dashboard/FacilityTable';
+import MetricsSummary from '../../components/Dashboard/MetricsSummary';
 import SatelliteIcon from '@mui/icons-material/Satellite';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -69,22 +72,16 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-          <p className="text-gray-600 dark:text-gray-300">Real-time overview of your facility</p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-            <span className="w-2 h-2 bg-green-400 rounded-full mr-1"></span>
-            System Online
-          </span>
-        </div>
+      {/* Top Metrics Summary */}
+      <MetricsSummary />
+
+      {/* Main Chart */}
+      <div className="grid grid-cols-1 gap-6">
+        <BudgetChart title="Facility Operations Budget" />
       </div>
 
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+      {/* Metrics Grid - Compact */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <MetricCard
           title="Total Devices"
           value={metrics.totalDevices}
@@ -155,13 +152,18 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Facilities Table */}
+      <div className="grid grid-cols-1 gap-6">
+        <FacilityTable />
+      </div>
+
       {/* Alerts and Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AlertPanel alerts={recentAlerts} />
         
         {/* Recent Activity */}
         <div className="card dark:bg-gray-800 dark:border-gray-700">
-          <div className="card-header dark:bg-gray-700">
+          <div className="card-header dark:bg-gray-800">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">Recent Activity</h3>
           </div>
           <div className="card-body dark:bg-gray-800">

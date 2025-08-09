@@ -39,26 +39,25 @@ const MetricCard: React.FC<MetricCardProps> = ({
   };
 
   return (
-    <div className="card dark:bg-gray-800 dark:border-gray-700">
-      <div className="card-body dark:bg-gray-800">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
-          </div>
-          <div className="text-2xl">
-            <IconComponent className="h-8 w-8 text-gray-600 dark:text-gray-400" />
+    <div className="card dark:bg-gray-800 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
+      <div className="card-body dark:bg-gray-800 p-4">
+        <div className="flex items-start justify-between">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center space-x-2 mb-2">
+              <IconComponent className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{title}</p>
+            </div>
+            <p className="text-xl font-bold text-gray-900 dark:text-white mb-1">{value}</p>
+            {change && (
+              <div className="flex items-center">
+                <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${getChangeColor()}`}>
+                  <span className="mr-1">{getChangeIcon()}</span>
+                  {change}
+                </span>
+              </div>
+            )}
           </div>
         </div>
-        
-        {change && (
-          <div className="mt-2">
-            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getChangeColor()}`}>
-              <span className="mr-1">{getChangeIcon()}</span>
-              {change}
-            </span>
-          </div>
-        )}
       </div>
     </div>
   );
