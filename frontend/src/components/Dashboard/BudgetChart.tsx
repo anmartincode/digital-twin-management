@@ -61,7 +61,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ title = "Facility Operations 
 
   const data = getDataForPeriod(timePeriod);
   const keys = ['maintenance', 'energy', 'upgrades'];
-  const colors = ['#3b82f6', '#10b981', '#f59e0b'];
+  const colors = ['#0ea5e9', '#14b8a6', '#f97316']; // Changed to sky-500, teal-500, orange-500
 
   // Get summary stats based on time period
   const getSummaryStats = () => {
@@ -233,22 +233,22 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ title = "Facility Operations 
   };
 
   return (
-    <div className="card dark:bg-gray-800 dark:border-gray-700">
-      <div className="card-header dark:bg-gray-800 flex items-center justify-between py-3">
+    <div className="card dark:bg-slate-800 dark:border-slate-700">
+      <div className="card-header dark:bg-slate-800 flex items-center justify-between py-3">
         <div className="flex items-center space-x-3">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{title}</h3>
           <div className="flex items-center space-x-4 text-sm">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span className="text-gray-600 dark:text-gray-400">Maintenance</span>
+              <div className="w-3 h-3 bg-sky-500 rounded-full"></div>
+              <span className="text-slate-600 dark:text-slate-400">Maintenance</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-gray-600 dark:text-gray-400">Energy</span>
+              <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+              <span className="text-slate-600 dark:text-slate-400">Energy</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-              <span className="text-gray-600 dark:text-gray-400">Upgrades</span>
+              <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+              <span className="text-slate-600 dark:text-slate-400">Upgrades</span>
             </div>
           </div>
         </div>
@@ -257,8 +257,8 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ title = "Facility Operations 
             onClick={toggleLayout}
             className={`px-3 py-1 text-xs font-medium rounded ${
               layout === 'stacked' 
-                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' 
-                : 'text-gray-500 dark:text-gray-400'
+                ? 'bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-300' 
+                : 'text-slate-500 dark:text-slate-400'
             }`}
           >
             Stacked
@@ -267,67 +267,67 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ title = "Facility Operations 
             onClick={toggleLayout}
             className={`px-3 py-1 text-xs font-medium rounded ${
               layout === 'grouped' 
-                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' 
-                : 'text-gray-500 dark:text-gray-400'
+                ? 'bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-300' 
+                : 'text-slate-500 dark:text-slate-400'
             }`}
           >
             Grouped
           </button>
-          <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400">
             <button
               onClick={() => handleTimePeriodChange('D')}
-              className={`px-1 py-0.5 rounded cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 ${
-                timePeriod === 'D' ? 'font-medium text-gray-900 dark:text-white' : ''
+              className={`px-1 py-0.5 rounded cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 ${
+                timePeriod === 'D' ? 'font-medium text-slate-900 dark:text-white' : ''
               }`}
             >
               D
             </button>
             <button
               onClick={() => handleTimePeriodChange('M')}
-              className={`px-1 py-0.5 rounded cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 ${
-                timePeriod === 'M' ? 'font-medium text-gray-900 dark:text-white' : ''
+              className={`px-1 py-0.5 rounded cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 ${
+                timePeriod === 'M' ? 'font-medium text-slate-900 dark:text-white' : ''
               }`}
             >
               M
             </button>
             <button
               onClick={() => handleTimePeriodChange('Y')}
-              className={`px-1 py-0.5 rounded cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 ${
-                timePeriod === 'Y' ? 'font-medium text-gray-900 dark:text-white' : ''
+              className={`px-1 py-0.5 rounded cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 ${
+                timePeriod === 'Y' ? 'font-medium text-slate-900 dark:text-white' : ''
               }`}
             >
               Y
             </button>
             <button
               onClick={() => handleTimePeriodChange('All')}
-              className={`px-1 py-0.5 rounded cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 ${
-                timePeriod === 'All' ? 'font-medium text-gray-900 dark:text-white' : ''
+              className={`px-1 py-0.5 rounded cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 ${
+                timePeriod === 'All' ? 'font-medium text-slate-900 dark:text-white' : ''
               }`}
             >
               All
             </button>
             <button
               onClick={() => handleTimePeriodChange('Custom')}
-              className={`px-1 py-0.5 rounded cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 ${
-                timePeriod === 'Custom' ? 'font-medium text-gray-900 dark:text-white' : ''
+              className={`px-1 py-0.5 rounded cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 ${
+                timePeriod === 'Custom' ? 'font-medium text-slate-900 dark:text-white' : ''
               }`}
             >
               Custom
             </button>
           </div>
-          <button className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded">
+          <button className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded">
             <RefreshIcon className="h-4 w-4" />
           </button>
-          <button className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded">
+          <button className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded">
             <MoreVertIcon className="h-4 w-4" />
           </button>
         </div>
       </div>
       
-      <div className="card-body dark:bg-gray-800 relative p-4">
+      <div className="card-body dark:bg-slate-800 relative p-4">
         {/* Time Period Label */}
         <div className="text-center mb-3">
-          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{getTimePeriodLabel()}</span>
+          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{getTimePeriodLabel()}</span>
         </div>
 
         {/* Chart Area - Centered */}
@@ -340,25 +340,25 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ title = "Facility Operations 
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-6 mb-4">
           <div className="text-center">
-            <div className="text-lg font-bold text-gray-900 dark:text-white">{summaryStats.maintenance.value}</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">Total Maintenance</div>
-            <div className="flex items-center justify-center text-xs text-green-600 dark:text-green-400 mt-1">
+            <div className="text-lg font-bold text-slate-900 dark:text-white">{summaryStats.maintenance.value}</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Total Maintenance</div>
+            <div className="flex items-center justify-center text-xs text-teal-600 dark:text-teal-400 mt-1">
               <TrendingUpIcon className="h-3 w-3 mr-1" />
               {summaryStats.maintenance.change}
             </div>
           </div>
           <div className="text-center">
-            <div className="text-lg font-bold text-gray-900 dark:text-white">{summaryStats.energy.value}</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">Energy Costs</div>
-            <div className="flex items-center justify-center text-xs text-red-600 dark:text-red-400 mt-1">
+            <div className="text-lg font-bold text-slate-900 dark:text-white">{summaryStats.energy.value}</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Energy Costs</div>
+            <div className="flex items-center justify-center text-xs text-pink-600 dark:text-pink-400 mt-1">
               <TrendingDownIcon className="h-3 w-3 mr-1" />
               {summaryStats.energy.change}
             </div>
           </div>
           <div className="text-center">
-            <div className="text-lg font-bold text-gray-900 dark:text-white">{summaryStats.upgrades.value}</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">Planned Upgrades</div>
-            <div className="flex items-center justify-center text-xs text-green-600 dark:text-green-400 mt-1">
+            <div className="text-lg font-bold text-slate-900 dark:text-white">{summaryStats.upgrades.value}</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Planned Upgrades</div>
+            <div className="flex items-center justify-center text-xs text-teal-600 dark:text-teal-400 mt-1">
               <TrendingUpIcon className="h-3 w-3 mr-1" />
               {summaryStats.upgrades.change}
             </div>
@@ -366,7 +366,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ title = "Facility Operations 
         </div>
 
         {/* Timeline markers */}
-        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 px-8">
+        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 px-8">
           {timePeriod === 'D' ? (
             <>
               <span>Today</span>
@@ -404,7 +404,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ title = "Facility Operations 
 
         {/* Budget range */}
         <div className="absolute top-3 right-4 text-right">
-          <div className="text-xs text-gray-500 dark:text-gray-400">
+          <div className="text-xs text-slate-500 dark:text-slate-400">
             {timePeriod === 'D' ? '↑ $0 - $1k' : 
              timePeriod === 'M' ? '↑ $0 - $10k' :
              timePeriod === 'Y' ? '↑ $0 - $400k' : '↑ $0 - $100k'}

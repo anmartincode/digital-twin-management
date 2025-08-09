@@ -39,18 +39,18 @@ const MetricsSummary: React.FC = () => {
     <div className="flex items-center space-x-8 mb-6">
       {metrics.map((metric, index) => (
         <div key={index} className="flex flex-col">
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">{metric.label}</div>
+          <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">{metric.label}</div>
           <div className="flex items-baseline space-x-2">
             <div className="flex items-baseline">
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">{metric.value}</span>
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">{metric.value}</span>
               {metric.suffix && (
-                <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">{metric.suffix}</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400 ml-1">{metric.suffix}</span>
               )}
             </div>
             <div className={`flex items-center text-xs font-medium ${
               metric.changeType === 'positive' 
-                ? 'text-green-600 dark:text-green-400' 
-                : 'text-red-600 dark:text-red-400'
+                ? 'text-teal-600 dark:text-teal-400' 
+                : 'text-pink-600 dark:text-pink-400'
             }`}>
               {metric.changeType === 'positive' ? (
                 <TrendingUpIcon className="h-3 w-3 mr-1" />

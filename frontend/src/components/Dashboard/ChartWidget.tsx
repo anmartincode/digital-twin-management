@@ -61,7 +61,7 @@ const ChartWidget: React.FC<ChartWidgetProps> = ({ title, type, data }) => {
       svg.append('path')
         .datum(data.datasets[0].data)
         .attr('fill', 'none')
-        .attr('stroke', data.datasets[0].borderColor || '#3b82f6')
+        .attr('stroke', data.datasets[0].borderColor || '#0ea5e9')
         .attr('stroke-width', 2)
         .attr('d', line);
 
@@ -74,7 +74,7 @@ const ChartWidget: React.FC<ChartWidgetProps> = ({ title, type, data }) => {
         .attr('cx', (d, i) => x(data.labels[i]) || 0)
         .attr('cy', d => y(d))
         .attr('r', 6)
-        .attr('fill', data.datasets[0].backgroundColor || '#3b82f6')
+        .attr('fill', data.datasets[0].backgroundColor || '#0ea5e9')
         .attr('stroke', '#fff')
         .attr('stroke-width', 2)
         .style('cursor', 'pointer')
@@ -92,40 +92,40 @@ const ChartWidget: React.FC<ChartWidgetProps> = ({ title, type, data }) => {
 
           d3.select(this)
             .attr('r', 8)
-            .attr('fill', '#1d4ed8');
+            .attr('fill', '#0284c7');
         })
         .on('mouseout', function() {
           setTooltip(prev => ({ ...prev, show: false }));
           
           d3.select(this)
             .attr('r', 6)
-            .attr('fill', data.datasets[0].backgroundColor || '#3b82f6');
+            .attr('fill', data.datasets[0].backgroundColor || '#0ea5e9');
         });
 
       // Add axes
       svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x))
-        .style('color', '#6b7280');
+        .style('color', '#64748b');
 
       svg.append('g')
         .call(d3.axisLeft(y))
-        .style('color', '#6b7280');
+        .style('color', '#64748b');
     }
   }, [data, type]);
 
   return (
-    <div className="card dark:bg-gray-800 dark:border-gray-700">
-      <div className="card-header dark:bg-gray-700">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">{title}</h3>
+    <div className="card dark:bg-slate-800 dark:border-slate-700">
+      <div className="card-header dark:bg-slate-700">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white">{title}</h3>
       </div>
-      <div className="card-body dark:bg-gray-800">
+      <div className="card-body dark:bg-slate-800">
         <div ref={chartRef} className="w-full h-80 relative"></div>
         
         {/* Tooltip */}
         {tooltip.show && (
           <div
-            className="absolute z-10 px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-lg pointer-events-none"
+            className="absolute z-10 px-3 py-2 text-sm text-white bg-slate-900 rounded-lg shadow-lg pointer-events-none"
             style={{
               left: tooltip.x,
               top: tooltip.y,

@@ -29,24 +29,24 @@ const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
   const getAlertColor = (type: Alert['type']) => {
     switch (type) {
       case 'info':
-        return 'border-blue-100 bg-blue-25 dark:border-blue-800 dark:bg-blue-950';
+        return 'border-sky-200 bg-sky-50 dark:border-sky-700/50 dark:bg-sky-900/20';
       case 'warning':
-        return 'border-amber-100 bg-amber-25 dark:border-amber-800 dark:bg-amber-950';
+        return 'border-orange-200 bg-orange-50 dark:border-orange-700/50 dark:bg-orange-900/20';
       case 'error':
-        return 'border-red-100 bg-red-25 dark:border-red-800 dark:bg-red-950';
+        return 'border-pink-200 bg-pink-50 dark:border-pink-700/50 dark:bg-pink-900/20';
       case 'critical':
-        return 'border-orange-100 bg-orange-25 dark:border-orange-800 dark:bg-orange-950';
+        return 'border-purple-200 bg-purple-50 dark:border-purple-700/50 dark:bg-purple-900/20';
       default:
-        return 'border-gray-100 bg-gray-25 dark:border-gray-800 dark:bg-gray-950';
+        return 'border-slate-200 bg-slate-50 dark:border-slate-700/50 dark:bg-slate-800/20';
     }
   };
 
   return (
-    <div className="card dark:bg-gray-800 dark:border-gray-700">
-      <div className="card-header dark:bg-gray-700">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Recent Alerts</h3>
+    <div className="card dark:bg-slate-800 dark:border-slate-700">
+      <div className="card-header dark:bg-slate-700">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white">Recent Alerts</h3>
       </div>
-      <div className="card-body dark:bg-gray-800">
+      <div className="card-body dark:bg-slate-800">
         <div className="space-y-3">
           {alerts.length === 0 ? (
             <Transition
@@ -58,7 +58,7 @@ const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <p className="text-gray-500 dark:text-gray-400 text-center py-4">No recent alerts</p>
+              <p className="text-slate-500 dark:text-slate-400 text-center py-4">No recent alerts</p>
             </Transition>
           ) : (
             alerts.map((alert, index) => {
@@ -78,11 +78,11 @@ const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
                     className={`p-3 border-l-4 rounded-r-md ${getAlertColor(alert.type)}`}
                   >
                     <div className="flex items-start">
-                      <IconComponent className="text-lg mr-2 text-gray-600 dark:text-gray-400" />
+                      <IconComponent className="text-lg mr-2 text-slate-600 dark:text-slate-400" />
                       <div className="flex-1">
-                        <h4 className="text-sm font-medium text-gray-900 dark:text-white">{alert.title}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{alert.message}</p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                        <h4 className="text-sm font-medium text-slate-900 dark:text-white">{alert.title}</h4>
+                        <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">{alert.message}</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
                           {alert.timestamp.toLocaleTimeString()}
                         </p>
                       </div>

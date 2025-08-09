@@ -71,41 +71,41 @@ const FacilityTable: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+        return 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300';
       case 'maintenance':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+        return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300';
       case 'offline':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+        return 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+        return 'bg-slate-100 text-slate-600 dark:bg-slate-800/30 dark:text-slate-400';
     }
   };
 
   return (
-    <div className="card dark:bg-gray-800 dark:border-gray-700">
+    <div className="card dark:bg-slate-800 dark:border-slate-700">
       {/* Table Header */}
-      <div className="card-header dark:bg-gray-800 flex items-center justify-between">
+      <div className="card-header dark:bg-slate-800 flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">All Facilities</h3>
-          <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-md">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">All Facilities</h3>
+          <button className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-md">
             <FilterListIcon className="h-4 w-4" />
           </button>
-          <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-md">
+          <button className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-md">
             <SortIcon className="h-4 w-4" />
           </button>
-          <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-md">
+          <button className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-md">
             <SearchIcon className="h-4 w-4" />
           </button>
-          <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-md">
+          <button className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-md">
             <MoreVertIcon className="h-4 w-4" />
           </button>
         </div>
         <div className="flex items-center space-x-2">
-          <button className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+          <button className="px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700">
             <GetAppIcon className="h-4 w-4 mr-2 inline" />
             Export
           </button>
-          <button className="px-3 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700">
+          <button className="px-3 py-2 text-sm font-medium text-white bg-sky-600 border border-transparent rounded-md hover:bg-sky-700">
             <AddIcon className="h-4 w-4 mr-2 inline" />
             Add New
           </button>
@@ -113,62 +113,62 @@ const FacilityTable: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="card-body dark:bg-gray-800 p-0">
+      <div className="card-body dark:bg-slate-800 p-0">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-900">
+          <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+            <thead className="bg-slate-50 dark:bg-slate-900">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   System
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Contact
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Value
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Source
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Status
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
               {facilities.map((facility) => (
-                <tr key={facility.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                <tr key={facility.id} className="hover:bg-slate-50 dark:hover:bg-slate-700">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white">
                     {facility.id}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white">
                     {facility.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
+                      <div className="h-8 w-8 rounded-full bg-sky-600 flex items-center justify-center">
                         <span className="text-white text-xs font-medium">{facility.contact.avatar}</span>
                       </div>
                       <div className="ml-3">
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        <div className="text-sm font-medium text-slate-900 dark:text-white">
                           {facility.contact.name}
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                     {facility.email}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white">
                     {facility.value}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                     {facility.source}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
