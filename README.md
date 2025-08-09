@@ -1,287 +1,133 @@
-# Digital Twin Management - Facility Management Integration
+# Digital Twin Management System
 
-A comprehensive Facility Management Integration application that bridges BIM models with IoT integration for digital twin management.
+A comprehensive facility management platform integrating Building Information Modeling (BIM), IoT devices, and real-time analytics for smart building management.
 
-## 🚀 Quick Start
+## Features
+
+### 🎨 **Enhanced Dark Mode with P3 Color Support**
+- **Three Theme Modes**: Light, Dark, and Auto (follows system preference)
+- **Display P3 Color Space**: Enhanced color reproduction on compatible displays
+- **Smooth Transitions**: Seamless theme switching with visual feedback
+- **Persistent Settings**: Theme preferences saved across sessions
+- **System Integration**: Auto mode respects system dark/light mode changes
+
+### 🏢 **Facility Management**
+- Interactive 3D BIM viewer
+- Real-time facility mapping
+- Asset tracking and management
+- Maintenance scheduling
+
+### 📊 **Analytics & Monitoring**
+- Real-time IoT device monitoring
+- Energy consumption analytics
+- Occupancy tracking
+- Performance dashboards
+
+### 👥 **Project Management**
+- Company and people management
+- Project tracking
+- Report generation
+- Settings and configuration
+
+## Dark Mode Implementation
+
+The dark mode functionality includes:
+
+1. **ThemeContext**: Centralized theme management with three modes
+2. **P3 Color Palette**: Enhanced colors using Display P3 color space for supported devices
+3. **Visual Feedback**: Theme preview section in Settings page
+4. **Accessibility**: Proper contrast ratios and smooth transitions
+
+### Theme Options
+- **Light Mode**: Clean, bright interface optimized for daylight use
+- **Dark Mode**: Easy on the eyes with rich P3 colors for low-light environments  
+- **Auto Mode**: Automatically switches based on system preference
+
+### P3 Color Benefits
+- Wider color gamut for more vibrant colors
+- Better color accuracy on modern displays
+- Enhanced visual experience on compatible devices
+- Fallback to standard colors on older displays
+
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+
-- npm 8+
-- Docker & Docker Compose
-- Git
+- npm or yarn
+- Modern browser with P3 color support (recommended)
 
-### One-Command Setup
+### Installation
+
+1. Clone the repository
 ```bash
-# Clone the repository
 git clone <repository-url>
 cd digital-twin-management
-
-# Run the setup script
-./scripts/manage.sh setup
 ```
 
-### Manual Setup
-1. **Install dependencies**
-   ```bash
-   npm run install:all
-   ```
-
-2. **Setup environment**
-   ```bash
-   cp env.example .env
-   # Edit .env with your configuration
-   ```
-
-3. **Start development environment**
-   ```bash
-   npm run dev
-   ```
-
-## 📁 Project Structure
-
-```
-digital-twin-management/
-├── frontend/                 # React.js frontend application
-│   ├── src/
-│   │   ├── components/      # React components
-│   │   ├── pages/          # Page components
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── services/       # API services
-│   │   ├── types/          # TypeScript type definitions
-│   │   └── utils/          # Utility functions
-│   ├── public/             # Static assets
-│   └── package.json
-├── backend/                 # Node.js backend application
-│   ├── src/
-│   │   ├── controllers/    # API controllers
-│   │   ├── models/         # Database models
-│   │   ├── routes/         # API routes
-│   │   ├── services/       # Business logic
-│   │   ├── middleware/     # Express middleware
-│   │   └── utils/          # Utility functions
-│   ├── python/             # Python services
-│   │   ├── bim_processor/  # BIM file processing
-│   │   ├── iot_handler/    # IoT data handling
-│   │   └── celery_tasks/   # Background tasks
-│   └── package.json
-├── database/               # Database schemas and migrations
-├── docs/                   # Documentation
-├── scripts/                # Management scripts
-├── docker-compose.yml      # Docker configuration
-└── package.json            # Root package.json
-```
-
-## 🛠️ Development Commands
-
-### Using the Management Script
+2. Install dependencies
 ```bash
-# Setup the entire project
-./scripts/manage.sh setup
-
-# Start development environment
-./scripts/manage.sh dev
-
-# Run tests
-./scripts/manage.sh test
-
-# Run linting
-./scripts/manage.sh lint
-
-# Format code
-./scripts/manage.sh format
-
-# Build project
-./scripts/manage.sh build
-
-# Clean project
-./scripts/manage.sh clean
-
-# Show project status
-./scripts/manage.sh status
-```
-
-### Using npm Scripts
-```bash
-# Development
-npm run dev              # Start both frontend and backend
-npm run dev:frontend     # Start only frontend
-npm run dev:backend      # Start only backend
-
-# Testing
-npm run test             # Run all tests
-npm run test:frontend    # Run frontend tests
-npm run test:backend     # Run backend tests
-
-# Code Quality
-npm run lint             # Run linting
-npm run format           # Format code
-
-# Building
-npm run build            # Build both frontend and backend
-npm run build:frontend   # Build frontend
-npm run build:backend    # Build backend
-
-# Docker
-npm run docker:build     # Build Docker images
-npm run docker:up        # Start containers
-npm run docker:down      # Stop containers
-npm run docker:logs      # View logs
-```
-
-## 🏗️ Architecture Overview
-
-### Frontend Stack
-- **React.js** with TypeScript for the main application
-- **React Three Fiber** for 3D BIM model visualization
-- **Tailwind CSS** for responsive UI design
-- **D3.js** for data visualizations and dashboards
-- **Socket.io-client** for real-time IoT data updates
-- **Mapbox GL JS** for facility mapping and floor plans
-
-### Backend Stack
-- **Node.js** with Express.js for RESTful APIs
-- **WebSocket** for Python real-time data streaming
-- **MQTT client** for IoT device communication
-- **Celery** for Python background job processing
-- **IfcOpenShell** for Python BIM file processing
-
-### Database Stack
-- **PostgreSQL** with PostGIS extension for spatial data
-- **TimescaleDB** for time series IoT data
-- **MongoDB** for document storage
-
-## 🔧 Features
-
-### BIM Integration
-- IFC file upload and processing
-- 3D model visualization with React Three Fiber
-- Building element extraction and classification
-- Spatial data management with PostGIS
-
-### IoT Integration
-- Real-time sensor data collection via MQTT
-- Device management and monitoring
-- Time-series data storage with TimescaleDB
-- Real-time dashboards and alerts
-
-### Facility Management
-- Interactive floor plans with Mapbox
-- Asset tracking and maintenance scheduling
-- Energy consumption monitoring
-- Space utilization analytics
-
-### Data Visualization
-- Real-time dashboards with D3.js
-- Performance metrics and KPIs
-- Historical data analysis
-- Custom chart configurations
-
-## 📊 API Documentation
-
-The API documentation is available at `/api/docs` when the backend is running.
-
-## 🐳 Docker Setup
-
-### Development Environment
-```bash
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-```
-
-### Production Build
-```bash
-# Build production images
-docker-compose -f docker-compose.prod.yml build
-
-# Start production environment
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-## 🧪 Testing
-
-### Frontend Testing
-```bash
+# Frontend
 cd frontend
-npm test                 # Run tests in watch mode
-npm test -- --coverage   # Run tests with coverage
+npm install
+
+# Backend (if applicable)
+cd ../backend
+npm install
 ```
 
-### Backend Testing
+3. Start the development server
 ```bash
-cd backend
-npm test                 # Run tests
-npm run test:coverage    # Run tests with coverage
+# Frontend
+cd frontend
+npm start
 ```
 
-## 📝 Code Quality
+### Testing Dark Mode
 
-### Linting
-```bash
-npm run lint             # Check code style
-npm run lint:fix         # Fix auto-fixable issues
+1. Navigate to the Settings page
+2. Use the Theme dropdown to switch between Light, Dark, and Auto modes
+3. Observe the theme preview section showing current mode and color palette
+4. On supported devices, enjoy enhanced P3 colors in dark mode
+
+## Technology Stack
+
+### Frontend
+- **React 18** with TypeScript
+- **Tailwind CSS** with P3 color support
+- **Headless UI** for accessible components
+- **Material UI Icons** for consistent iconography
+- **React Three Fiber** for 3D BIM visualization
+
+### Styling
+- **Display P3 Colors**: Enhanced color reproduction
+- **Dark Mode**: Class-based implementation
+- **Responsive Design**: Mobile-first approach
+- **Smooth Transitions**: CSS transitions for theme switching
+
+## Project Structure
+
+```
+frontend/
+├── src/
+│   ├── components/          # Reusable UI components
+│   ├── contexts/           # React contexts (Theme, etc.)
+│   ├── pages/              # Page components
+│   │   └── Settings/       # Settings page with theme controls
+│   └── styles/             # Global styles and Tailwind config
+├── tailwind.config.js      # P3 colors and theme configuration
+└── package.json
 ```
 
-### Formatting
-```bash
-npm run format           # Format code with Prettier
-npm run format:check     # Check formatting
-```
-
-## 🔒 Security
-
-- JWT-based authentication
-- Role-based access control (RBAC)
-- Input validation and sanitization
-- Rate limiting
-- CORS configuration
-- Environment variable management
-
-## 📈 Performance
-
-- Code splitting and lazy loading
-- Image optimization
-- Database query optimization
-- Caching strategies
-- Real-time performance monitoring
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Create a feature branch
 3. Make your changes
-4. Add tests for new functionality
-5. Run linting and tests (`npm run lint && npm run test`)
-6. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-7. Push to the branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
+4. Test dark mode functionality
+5. Submit a pull request
 
-### Commit Message Format
-```
-type(scope): description
+## Browser Support
 
-[optional body]
-
-[optional footer]
-```
-
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Documentation**: Check the [docs/](docs/) directory
-- **Issues**: Create an issue on GitHub
-- **Discussions**: Use GitHub Discussions for questions
-
-## 🔄 Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
+- **P3 Colors**: Safari 10+, Chrome 62+, Firefox 113+
+- **Dark Mode**: All modern browsers
+- **Fallback**: Standard sRGB colors on older browsers

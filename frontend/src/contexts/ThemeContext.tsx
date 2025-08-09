@@ -1,8 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+
+export type ThemeMode = 'light' | 'dark' | 'auto';
 
 interface ThemeContextType {
+  themeMode: ThemeMode;
   isDarkMode: boolean;
-  toggleDarkMode: () => void;
+  setThemeMode: (mode: ThemeMode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -20,27 +23,68 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('darkMode');
-    return saved ? JSON.parse(saved) : false;
+  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem('themeMode');
+    return (saved as ThemeMode) || 'light';
   });
 
-  useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Function to detect system preference
+  const getSystemPreference = useCallback((): boolean => {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }, []);
+
+  // Function to apply theme
+  const applyTheme = useCallback((mode: ThemeMode) => {
+    let shouldBeDark = false;
     
-    if (isDarkMode) {
+    switch (mode) {
+      case 'dark':
+        shouldBeDark = true;
+        break;
+      case 'light':
+        shouldBeDark = false;
+        break;
+      case 'auto':
+        shouldBeDark = getSystemPreference();
+        break;
+    }
+
+    setIsDarkMode(shouldBeDark);
+    
+    if (shouldBeDark) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [isDarkMode]);
+  }, [getSystemPreference]);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  // Set theme mode and persist to localStorage
+  const setThemeMode = useCallback((mode: ThemeMode) => {
+    setThemeModeState(mode);
+    localStorage.setItem('themeMode', mode);
+    applyTheme(mode);
+  }, [applyTheme]);
+
+  // Initial theme application
+  useEffect(() => {
+    applyTheme(themeMode);
+  }, [applyTheme, themeMode]);
+
+  // Listen for system theme changes when in auto mode
+  useEffect(() => {
+    if (themeMode === 'auto') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = () => applyTheme('auto');
+      
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+  }, [themeMode, applyTheme]);
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+    <ThemeContext.Provider value={{ themeMode, isDarkMode, setThemeMode }}>
       {children}
     </ThemeContext.Provider>
   );
