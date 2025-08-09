@@ -203,77 +203,213 @@ const Analytics: React.FC = () => {
     const svg = d3.select(performanceChartRef.current);
     svg.selectAll("*").remove();
 
-    const margin = { top: 20, right: 80, bottom: 40, left: 80 };
-    const width = 600 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    const margin = { top: 40, right: 140, bottom: 80, left: 80 };
+    const width = 1000 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
 
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const x = d3.scaleBand()
-      .domain(performanceData.map(d => d.system))
-      .range([0, width])
-      .padding(0.1);
+    // Create scales for the scatterplot
+    const xScale = d3.scaleLinear()
+      .domain([70, 100])
+      .range([0, width]);
 
-    const y = d3.scaleLinear()
-      .domain([0, 100])
+    const yScale = d3.scaleLinear()
+      .domain([70, 100])
       .range([height, 0]);
 
-    const keys = ['efficiency', 'maintenance', 'uptime'];
-    const colors = ['#0ea5e9', '#14b8a6', '#f97316'];
+    const sizeScale = d3.scaleLinear()
+      .domain([95, 100])
+      .range([12, 30]);
 
-    const x1 = d3.scaleBand()
-      .domain(keys)
-      .range([0, x.bandwidth()])
-      .padding(0.05);
+    const colorScale = d3.scaleOrdinal()
+      .domain(performanceData.map(d => d.system))
+      .range(['#0ea5e9', '#14b8a6', '#f97316', '#8b5cf6', '#ef4444', '#06b6d4']);
+
+    // Add grid lines
+    g.append("g")
+      .attr("class", "grid")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(xScale)
+        .tickSize(-height)
+        .tickFormat(null)
+      )
+      .style("stroke-dasharray", "3,3")
+      .style("opacity", 0.3);
+
+    g.append("g")
+      .attr("class", "grid")
+      .call(d3.axisLeft(yScale)
+        .tickSize(-width)
+        .tickFormat(null)
+      )
+      .style("stroke-dasharray", "3,3")
+      .style("opacity", 0.3);
 
     // Add axes
     g.append("g")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x))
-      .style("color", "#64748b")
-      .selectAll("text")
-      .style("font-size", "10px");
-
-    g.append("g")
-      .call(d3.axisLeft(y))
+      .call(d3.axisBottom(xScale))
       .style("color", "#64748b");
 
-    // Add bars
-    const systems = g.selectAll(".system")
-      .data(performanceData)
-      .enter().append("g")
-      .attr("class", "system")
-      .attr("transform", d => `translate(${x(d.system)},0)`);
+    g.append("g")
+      .call(d3.axisLeft(yScale))
+      .style("color", "#64748b");
 
-    systems.selectAll("rect")
-      .data(d => keys.map(key => ({ key, value: d[key as keyof typeof d] as number })))
-      .enter().append("rect")
-      .attr("x", d => x1(d.key)!)
-      .attr("y", d => y(d.value))
-      .attr("width", x1.bandwidth())
-      .attr("height", d => height - y(d.value))
-      .attr("fill", (d, i) => colors[i]);
+    // Add axis labels
+    g.append("text")
+      .attr("transform", `translate(${width / 2}, ${height + 50})`)
+      .style("text-anchor", "middle")
+      .style("fill", "#64748b")
+      .style("font-size", "16px")
+      .style("font-weight", "500")
+      .text("Efficiency (%)");
+
+    g.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .style("fill", "#64748b")
+      .style("font-size", "16px")
+      .style("font-weight", "500")
+      .text("Maintenance Score (%)");
+
+    // Create tooltip
+    const tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("background", "rgba(0, 0, 0, 0.8)")
+      .style("color", "white")
+      .style("padding", "8px 12px")
+      .style("border-radius", "6px")
+      .style("font-size", "12px")
+      .style("pointer-events", "none")
+      .style("opacity", 0)
+      .style("z-index", "1000");
+
+    // Add data points (circles)
+    g.selectAll(".dot")
+      .data(performanceData)
+      .enter().append("circle")
+      .attr("class", "dot")
+      .attr("cx", d => xScale(d.efficiency))
+      .attr("cy", d => yScale(d.maintenance))
+      .attr("r", d => sizeScale(d.uptime))
+      .style("fill", d => colorScale(d.system) as string)
+      .style("fill-opacity", 0.7)
+      .style("stroke", d => colorScale(d.system) as string)
+      .style("stroke-width", 2)
+      .style("cursor", "pointer")
+      .on("mouseover", function(event, d) {
+        d3.select(this)
+          .style("fill-opacity", 1)
+          .style("stroke-width", 3);
+        
+        tooltip.transition()
+          .duration(200)
+          .style("opacity", .9);
+        
+        tooltip.html(`
+          <strong>${d.system}</strong><br/>
+          Efficiency: ${d.efficiency}%<br/>
+          Maintenance: ${d.maintenance}%<br/>
+          Uptime: ${d.uptime}%
+        `)
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(event, d) {
+        d3.select(this)
+          .style("fill-opacity", 0.7)
+          .style("stroke-width", 2);
+        
+        tooltip.transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
+
+    // Add system labels next to each point
+    g.selectAll(".label")
+      .data(performanceData)
+      .enter().append("text")
+      .attr("class", "label")
+      .attr("x", d => xScale(d.efficiency) + sizeScale(d.uptime) + 8)
+      .attr("y", d => yScale(d.maintenance) + 5)
+      .style("font-size", "13px")
+      .style("fill", "#64748b")
+      .style("font-weight", "500")
+      .text(d => d.system);
 
     // Add legend
     const legend = g.append("g")
-      .attr("transform", `translate(${width + 20}, 20)`);
+      .attr("transform", `translate(${width + 30}, 30)`);
 
-    keys.forEach((key, i) => {
+    // Legend title
+    legend.append("text")
+      .attr("x", 0)
+      .attr("y", 0)
+      .style("font-size", "14px")
+      .style("font-weight", "600")
+      .style("fill", "#64748b")
+      .text("Systems");
+
+    // Legend items
+    performanceData.forEach((d, i) => {
       const legendItem = legend.append("g")
-        .attr("transform", `translate(0, ${i * 20})`);
+        .attr("transform", `translate(0, ${25 + i * 25})`);
 
-      legendItem.append("rect")
-        .attr("width", 12)
-        .attr("height", 12)
-        .attr("fill", colors[i]);
+      legendItem.append("circle")
+        .attr("cx", 8)
+        .attr("cy", 0)
+        .attr("r", 8)
+        .style("fill", colorScale(d.system) as string)
+        .style("fill-opacity", 0.7)
+        .style("stroke", colorScale(d.system) as string)
+        .style("stroke-width", 2);
 
       legendItem.append("text")
-        .attr("x", 16)
-        .attr("y", 9)
+        .attr("x", 20)
+        .attr("y", 5)
+        .style("font-size", "13px")
+        .style("fill", "#64748b")
+        .text(d.system);
+    });
+
+    // Add size legend
+    const sizeLegend = legend.append("g")
+      .attr("transform", `translate(0, ${30 + performanceData.length * 25 + 30})`);
+
+    sizeLegend.append("text")
+      .attr("x", 0)
+      .attr("y", 0)
+      .style("font-size", "14px")
+      .style("font-weight", "600")
+      .style("fill", "#64748b")
+      .text("Uptime");
+
+    // Size legend circles
+    [95, 97.5, 100].forEach((uptime, i) => {
+      const sizeLegendItem = sizeLegend.append("g")
+        .attr("transform", `translate(0, ${20 + i * 35})`);
+
+      sizeLegendItem.append("circle")
+        .attr("cx", sizeScale(uptime))
+        .attr("cy", 0)
+        .attr("r", sizeScale(uptime))
+        .style("fill", "none")
+        .style("stroke", "#64748b")
+        .style("stroke-width", 1)
+        .style("opacity", 0.5);
+
+      sizeLegendItem.append("text")
+        .attr("x", 35)
+        .attr("y", 5)
         .style("font-size", "12px")
         .style("fill", "#64748b")
-        .text(key.charAt(0).toUpperCase() + key.slice(1));
+        .text(`${uptime}%`);
     });
   };
 
@@ -397,8 +533,8 @@ const Analytics: React.FC = () => {
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">System Performance Metrics</h3>
             <p className="text-sm text-slate-600 dark:text-slate-400">Efficiency, maintenance, and uptime by system</p>
           </div>
-          <div className="card-body dark:bg-slate-800">
-            <svg ref={performanceChartRef} width="600" height="300" className="w-full h-auto"></svg>
+          <div className="card-body dark:bg-slate-800 p-4">
+            <svg ref={performanceChartRef} viewBox="0 0 1000 500" className="w-full h-auto" style={{ minHeight: '400px' }}></svg>
           </div>
         </div>
       </div>
